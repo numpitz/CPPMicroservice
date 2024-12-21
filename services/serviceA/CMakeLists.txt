@@ -9,6 +9,9 @@ set(SERVICE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ServiceA_Impl.cpp
 )
 
+# Specify the output directory for .ifc files
+set(CMAKE_IFC_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/modules")
+
 target_sources(serviceA PRIVATE ${SERVICE_SOURCES} PUBLIC ${SERVICE_MODULES})
 
 # Link to the base interface library

@@ -27,10 +27,11 @@ set(MSQUIC_INCLUDE_DIR "${CMAKE_BINARY_DIR}/_deps/msquic-src/src/inc")
 set(MSQUIC_LIB_DIR "${CMAKE_BINARY_DIR}/_deps/msquic-src/build/obj/Debug")
 
 # Add MsQuic library manually
-add_library(MsQuic STATIC IMPORTED)
+add_library(MsQuic SHARED IMPORTED)
 set_target_properties(MsQuic PROPERTIES
-    IMPORTED_LOCATION "${MSQUIC_LIB_DIR}/msquic.lib"
-    INTERFACE_INCLUDE_DIRECTORIES "${MSQUIC_INCLUDE_DIR}"
+    IMPORTED_LOCATION "${MSQUIC_LIB_DIR}/msquic.lib"       # Path to the .lib file
+    IMPORTED_IMPLIB "${MSQUIC_LIB_DIR}/msquic.lib"         # Import library
+    INTERFACE_INCLUDE_DIRECTORIES "${MSQUIC_INCLUDE_DIR}"  # Include directory
 )
 
 # Alias MsQuic target for consistency
