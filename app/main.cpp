@@ -4,6 +4,10 @@
 #include <memory>
 #include <string>
 
+#include <nlohmann/json.hpp>
+#include <msquic.h>
+
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -99,7 +103,60 @@ void load_and_validate_services(const std::string & directory) {
     }
 }
 
+
+void TraceMsQuicVersion() {
+    const QUIC_API_TABLE* QuicApi;
+    QUIC_STATUS Status = MsQuicOpen2(&QuicApi);
+    if (QUIC_FAILED(Status)) {
+        std::cerr << "Failed to open MsQuic API: " << Status << std::endl;
+        return;
+    }
+
+    // Query the library version
+    uint32_t Version[4] = { 0 };
+    uint32_t BufferLength = sizeof(Version);
+    Status = QuicApi->GetParam(
+        nullptr,  // Global parameter
+        QUIC_PARAM_GLOBAL_LIBRARY_VERSION,
+        &BufferLength,
+        Version);
+    if (QUIC_SUCCEEDED(Status)) {
+        std::cout << "MsQuic Library Version: "
+            << Version[0] << "." << Version[1] << "." << Version[2]
+            << " (Build " << Version[3] << ")" << std::endl;
+    }
+    else {
+        std::cerr << "Failed to query library version: " << Status << std::endl;
+    }
+
+    // Query the Git hash
+    char GitHash[64] = { 0 };
+    BufferLength = sizeof(GitHash);
+    Status = QuicApi->GetParam(
+        nullptr,  // Global parameter
+        QUIC_PARAM_GLOBAL_LIBRARY_GIT_HASH,
+        &BufferLength,
+        GitHash);
+    if (QUIC_SUCCEEDED(Status)) {
+        std::cout << "MsQuic Git Hash: " << GitHash << std::endl;
+    }
+    else {
+        std::cerr << "Failed to query Git hash: " << Status << std::endl;
+    }
+
+    // Close the API using MsQuicClose
+    MsQuicClose(QuicApi);
+}
+
 int main() {
+
+    std::cout << "JSON:" 
+        << NLOHMANN_JSON_VERSION_MAJOR << "." 
+        << NLOHMANN_JSON_VERSION_MINOR << "."
+        << NLOHMANN_JSON_VERSION_PATCH << "\n";
+
+    TraceMsQuicVersion();
+
     // Get the directory containing app.exe
     const std::string exe_path = fs::current_path().string();
     std::cout << "Executable path: " << exe_path << "\n";

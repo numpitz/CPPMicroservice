@@ -16,6 +16,26 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
+include(CPM)
+cpmaddpackage("gh:nlohmann/json#v3.11.3")
+cpmaddpackage("gh:microsoft/msquic#v2.4.7")
+
+# Define MsQuic paths
+set(MSQUIC_INCLUDE_DIR "${CMAKE_BINARY_DIR}/_deps/msquic-src/src/inc")
+set(MSQUIC_LIB_DIR "${CMAKE_BINARY_DIR}/_deps/msquic-src/build/obj/Debug")
+
+# Add MsQuic library manually
+add_library(MsQuic STATIC IMPORTED)
+set_target_properties(MsQuic PROPERTIES
+    IMPORTED_LOCATION "${MSQUIC_LIB_DIR}/msquic.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${MSQUIC_INCLUDE_DIR}"
+)
+
+
+# Alias MsQuic target for consistency
+add_library(MsQuic::MsQuic ALIAS MsQuic)
+
 # Add subdirectories
 add_subdirectory(base)
 add_subdirectory(services)

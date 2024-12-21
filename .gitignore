@@ -32,3 +32,5 @@ out/
 *.exe
 *.out
 *.app
+/vc140.idb
+/vc140.pdb
