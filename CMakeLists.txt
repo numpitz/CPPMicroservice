@@ -20,6 +20,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(CPM)
 cpmaddpackage("gh:nlohmann/json#v3.11.3")
 cpmaddpackage("gh:microsoft/msquic#v2.4.7")
+cpmaddpackage("gh:oatpp/oatpp#1.3.1")
 
 # Define MsQuic paths
 set(MSQUIC_INCLUDE_DIR "${CMAKE_BINARY_DIR}/_deps/msquic-src/src/inc")
@@ -31,7 +32,6 @@ set_target_properties(MsQuic PROPERTIES
     IMPORTED_LOCATION "${MSQUIC_LIB_DIR}/msquic.lib"
     INTERFACE_INCLUDE_DIRECTORIES "${MSQUIC_INCLUDE_DIR}"
 )
-
 
 # Alias MsQuic target for consistency
 add_library(MsQuic::MsQuic ALIAS MsQuic)

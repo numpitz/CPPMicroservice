@@ -10,6 +10,7 @@ target_sources(app PRIVATE ${APP_SOURCES})
 target_link_libraries(app PRIVATE 
     serviceA 
     nlohmann_json::nlohmann_json
+    oatpp 
     MsQuic::MsQuic
 )
 

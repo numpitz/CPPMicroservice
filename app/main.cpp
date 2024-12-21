@@ -7,6 +7,8 @@
 #include <nlohmann/json.hpp>
 #include <msquic.h>
 
+#include "oatpp/core/base/Environment.hpp"
+
 
 #ifdef _WIN32
 #include <windows.h>
@@ -156,6 +158,8 @@ int main() {
         << NLOHMANN_JSON_VERSION_PATCH << "\n";
 
     TraceMsQuicVersion();
+
+    std::cout << "oat++ version: " << OATPP_VERSION << std::endl;
 
     // Get the directory containing app.exe
     const std::string exe_path = fs::current_path().string();
